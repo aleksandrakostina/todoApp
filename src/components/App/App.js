@@ -5,6 +5,8 @@ import TaskList from "../TaskList";
 import "./App.css";
 
 class App extends Component {
+  maxId = 4;
+
   state = {
     todos: [
       {
@@ -26,12 +28,21 @@ class App extends Component {
         created: new Date(2022, 0, 10, 10, 30),
       },
     ],
+    filter: "all",
   };
 
   deleteItem = (id) => {
     this.setState(({ todos }) => {
       return {
         todos: todos.filter((todo) => todo.id !== id),
+      };
+    });
+  };
+
+  deleteCompletedItems = () => {
+    this.setState(({ todos }) => {
+      return {
+        todos: todos.filter((todo) => !todo.completed),
       };
     });
   };
@@ -46,20 +57,60 @@ class App extends Component {
     });
   };
 
+  createItem = (text) => {
+    return {
+      id: this.maxId++,
+      completed: false,
+      description: text,
+      created: new Date(),
+    };
+  };
+
+  addItem = (text) => {
+    this.setState(({ todos }) => {
+      return {
+        todos: [...todos, this.createItem(text)],
+      };
+    });
+  };
+
+  onFilterChange = (filter) => {
+    this.setState({ filter });
+  };
+
+  filterItems(items, filter) {
+    if (filter === "all") {
+      return items;
+    } else if (filter === "active") {
+      return items.filter((item) => !item.completed);
+    } else if (filter === "completed") {
+      return items.filter((item) => item.completed);
+    }
+  }
+
   render() {
+    const { todos, filter } = this.state;
+    const countIncompletedItem = todos.filter((todo) => !todo.completed).length;
+    const visibleTodos = this.filterItems(todos, filter);
+
     return (
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-          <NewTaskForm />
+          <NewTaskForm addItem={this.addItem} />
         </header>
         <section className="main">
           <TaskList
-            todos={this.state.todos}
+            todos={visibleTodos}
             deleteItem={this.deleteItem}
             changeStatusItem={this.changeStatusItem}
           />
-          <Footer />
+          <Footer
+            deleteCompletedItems={this.deleteCompletedItems}
+            countIncompletedItem={countIncompletedItem}
+            onFilterChange={this.onFilterChange}
+            filter={filter}
+          />
         </section>
       </section>
     );
