@@ -1,5 +1,6 @@
 import React from "react";
 import TasksFilter from "../TasksFilter";
+import PropTypes from "prop-types";
 import "./Footer.css";
 
 const Footer = ({
@@ -17,6 +18,19 @@ const Footer = ({
       </button>
     </footer>
   );
+};
+
+Footer.defaultProps = {
+  filter: "all",
+  deleteCompletedItems: () => {},
+  onFilterChange: () => {},
+};
+
+Footer.propTypes = {
+  filter: PropTypes.string.isRequired,
+  deleteCompletedItems: PropTypes.func,
+  countIncompletedItem: PropTypes.number.isRequired,
+  onFilterChange: PropTypes.func,
 };
 
 export default Footer;

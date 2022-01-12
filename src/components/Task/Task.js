@@ -1,5 +1,6 @@
 import React from "react";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import PropTypes from "prop-types";
 
 const Task = ({ todo, deleteItem, changeStatusItem }) => {
   return (
@@ -20,6 +21,21 @@ const Task = ({ todo, deleteItem, changeStatusItem }) => {
       <button className="icon icon-destroy" onClick={deleteItem}></button>
     </div>
   );
+};
+
+Task.defaultProps = {
+  deleteItem: () => {},
+  changeStatusItem: () => {},
+};
+
+Task.propTypes = {
+  todo: PropTypes.shape({
+    description: PropTypes.string.isRequired,
+    created: PropTypes.object.isRequired,
+    completed: PropTypes.bool.isRequired,
+  }),
+  deleteItem: PropTypes.func,
+  changeStatusItem: PropTypes.func,
 };
 
 export default Task;
