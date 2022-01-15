@@ -1,65 +1,59 @@
-import React, { Component } from "react";
-import Footer from "../Footer";
-import NewTaskForm from "../NewTaskForm";
-import TaskList from "../TaskList";
-import "./App.css";
+import React, { Component } from 'react';
+import Footer from '../Footer';
+import NewTaskForm from '../NewTaskForm';
+import TaskList from '../TaskList';
+import './App.css';
 
 class App extends Component {
-  maxId = 4;
+  maxId = 3;
 
   state = {
     todos: [
       {
         id: 1,
         completed: true,
-        description: "Completed task",
+        description: 'Completed task',
         created: new Date(2022, 0, 10, 10, 10),
       },
       {
         id: 2,
         completed: false,
-        description: "Editing task",
+        description: 'Editing task',
         created: new Date(2022, 0, 10, 10, 20),
       },
       {
         id: 3,
         completed: false,
-        description: "Active task",
+        description: 'Active task',
         created: new Date(2022, 0, 10, 10, 30),
       },
     ],
-    filter: "all",
+    filter: 'all',
   };
 
   deleteItem = (id) => {
-    this.setState(({ todos }) => {
-      return {
-        todos: todos.filter((todo) => todo.id !== id),
-      };
-    });
+    this.setState(({ todos }) => ({
+      todos: todos.filter((todo) => todo.id !== id),
+    }));
   };
 
   deleteCompletedItems = () => {
-    this.setState(({ todos }) => {
-      return {
-        todos: todos.filter((todo) => !todo.completed),
-      };
-    });
+    this.setState(({ todos }) => ({
+      todos: todos.filter((todo) => !todo.completed),
+    }));
   };
 
   changeStatusItem = (id) => {
-    this.setState(({ todos }) => {
-      return {
-        todos: todos.map((todo) =>
-          todo.id === id ? { ...todo, completed: !todo.completed } : todo
-        ),
-      };
-    });
+    this.setState(({ todos }) => ({
+      todos: todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)),
+    }));
   };
 
   createItem = (text) => {
+    this.maxId += 1;
+
     return {
-      id: this.maxId++,
+      id: this.maxId,
       completed: false,
       description: text,
       created: new Date(),
@@ -67,26 +61,27 @@ class App extends Component {
   };
 
   addItem = (text) => {
-    this.setState(({ todos }) => {
-      return {
-        todos: [...todos, this.createItem(text)],
-      };
-    });
+    this.setState(({ todos }) => ({
+      todos: [...todos, this.createItem(text)],
+    }));
   };
 
   onFilterChange = (filter) => {
     this.setState({ filter });
   };
 
-  filterItems(items, filter) {
-    if (filter === "all") {
-      return items;
-    } else if (filter === "active") {
-      return items.filter((item) => !item.completed);
-    } else if (filter === "completed") {
-      return items.filter((item) => item.completed);
+  filterItems = (items, filter) => {
+    switch (filter) {
+      case 'all':
+        return items;
+      case 'active':
+        return items.filter((item) => !item.completed);
+      case 'completed':
+        return items.filter((item) => item.completed);
+      default:
+        return 'all';
     }
-  }
+  };
 
   render() {
     const { todos, filter } = this.state;
@@ -100,11 +95,7 @@ class App extends Component {
           <NewTaskForm addItem={this.addItem} />
         </header>
         <section className="main">
-          <TaskList
-            todos={visibleTodos}
-            deleteItem={this.deleteItem}
-            changeStatusItem={this.changeStatusItem}
-          />
+          <TaskList todos={visibleTodos} deleteItem={this.deleteItem} changeStatusItem={this.changeStatusItem} />
           <Footer
             deleteCompletedItems={this.deleteCompletedItems}
             countIncompletedItem={countIncompletedItem}

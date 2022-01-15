@@ -1,25 +1,21 @@
-import React from "react";
-import PropTypes from "prop-types";
-import "./TasksFilter.css";
+import React from 'react';
+import PropTypes from 'prop-types';
+import './TasksFilter.css';
 
 const TasksFilter = ({ filter, onFilterChange }) => {
   const filterButtons = [
-    { name: "all", label: "All" },
-    { name: "active", label: "Active" },
-    { name: "completed", label: "Completed" },
+    { name: 'all', label: 'All' },
+    { name: 'active', label: 'Active' },
+    { name: 'completed', label: 'Completed' },
   ];
 
   const itemsFilter = filterButtons.map(({ name, label }) => {
     const isActive = name === filter;
-    const classNames = isActive ? "selected" : "";
+    const classNames = isActive ? 'selected' : '';
 
     return (
       <li key={name}>
-        <button
-          type="button"
-          onClick={() => onFilterChange(name)}
-          className={classNames}
-        >
+        <button type="button" onClick={() => onFilterChange(name)} className={classNames}>
           {label}
         </button>
       </li>
@@ -30,12 +26,12 @@ const TasksFilter = ({ filter, onFilterChange }) => {
 };
 
 TasksFilter.defaultProps = {
-  filter: "all",
+  filter: 'all',
   onFilterChange: () => {},
 };
 
 TasksFilter.propTypes = {
-  filter: PropTypes.string.isRequired,
+  filter: PropTypes.string,
   onFilterChange: PropTypes.func,
 };
 
