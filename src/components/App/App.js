@@ -5,29 +5,10 @@ import TaskList from '../TaskList';
 import './App.css';
 
 class App extends Component {
-  maxId = 3;
+  maxId = 1;
 
   state = {
-    todos: [
-      {
-        id: 1,
-        completed: true,
-        description: 'Completed task',
-        created: new Date(2022, 0, 10, 10, 10),
-      },
-      {
-        id: 2,
-        completed: false,
-        description: 'Editing task',
-        created: new Date(2022, 0, 10, 10, 20),
-      },
-      {
-        id: 3,
-        completed: false,
-        description: 'Active task',
-        created: new Date(2022, 0, 10, 10, 30),
-      },
-    ],
+    todos: [this.createItem('Completed task'), this.createItem('Editing task'), this.createItem('Active task')],
     filter: 'all',
   };
 
@@ -47,17 +28,6 @@ class App extends Component {
     this.setState(({ todos }) => ({
       todos: todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)),
     }));
-  };
-
-  createItem = (text) => {
-    this.maxId += 1;
-
-    return {
-      id: this.maxId,
-      completed: false,
-      description: text,
-      created: new Date(),
-    };
   };
 
   addItem = (text) => {
@@ -82,6 +52,17 @@ class App extends Component {
         return 'all';
     }
   };
+
+  createItem(text) {
+    this.maxId += 1;
+
+    return {
+      id: this.maxId,
+      completed: false,
+      description: text,
+      created: new Date(),
+    };
+  }
 
   render() {
     const { todos, filter } = this.state;

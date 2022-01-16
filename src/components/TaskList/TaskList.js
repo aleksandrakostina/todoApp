@@ -10,7 +10,7 @@ const TaskList = ({ todos, deleteItem, changeStatusItem }) => (
 
       return (
         <li key={id} className={todoItem.completed ? 'completed' : ''}>
-          <Task todo={todoItem} deleteItem={() => deleteItem(id)} changeStatusItem={() => changeStatusItem(id)} />
+          <Task todo={todo} deleteItem={deleteItem} changeStatusItem={changeStatusItem} />
         </li>
       );
     })}
