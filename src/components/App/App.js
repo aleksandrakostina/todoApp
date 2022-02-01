@@ -10,6 +10,7 @@ class App extends Component {
   state = {
     todos: [this.createItem('Completed task'), this.createItem('Editing task'), this.createItem('Active task')],
     filter: 'all',
+    timerId: null
   };
 
   deleteItem = (id) => {
@@ -30,9 +31,9 @@ class App extends Component {
     }));
   };
 
-  addItem = (text) => {
+  addItem = (text, time) => {
     this.setState(({ todos }) => ({
-      todos: [...todos, this.createItem(text)],
+      todos: [...todos, this.createItem(text, time)],
     }));
   };
 
@@ -53,7 +54,17 @@ class App extends Component {
     }
   };
 
-  createItem(text) {
+  upadateTime = (id, time) => {
+    this.setState(({ todos }) => ({
+      todos: todos.map((todo) => (todo.id === id ? { ...todo, time } : todo)),
+    }));
+  }
+
+  setTimerId = (id) => {
+    this.setState({timerId: id});
+  }
+
+  createItem(text, time = 0) {
     this.maxId += 1;
 
     return {
@@ -61,11 +72,12 @@ class App extends Component {
       completed: false,
       description: text,
       created: new Date(),
+      time
     };
   }
 
   render() {
-    const { todos, filter } = this.state;
+    const { todos, filter, timerId } = this.state;
     const countIncompletedItem = todos.filter((todo) => !todo.completed).length;
     const visibleTodos = this.filterItems(todos, filter);
 
@@ -76,7 +88,7 @@ class App extends Component {
           <NewTaskForm addItem={this.addItem} />
         </header>
         <section className="main">
-          <TaskList todos={visibleTodos} deleteItem={this.deleteItem} changeStatusItem={this.changeStatusItem} />
+          <TaskList todos={visibleTodos} deleteItem={this.deleteItem} changeStatusItem={this.changeStatusItem} upadateTime={this.upadateTime} timerId={timerId} setTimerId={this.setTimerId} />
           <Footer
             deleteCompletedItems={this.deleteCompletedItems}
             countIncompletedItem={countIncompletedItem}
